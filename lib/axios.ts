@@ -1,10 +1,9 @@
 "use client";
 import axios from 'axios';
-import { getRouterInstance } from './router-instance';
-import { useRouter } from 'next/navigation';
 
 const axiosInstance = axios.create({
-  baseURL: '/api/v1/',
+  // Use same-origin proxy to avoid CORS in the browser
+  baseURL: '/api/proxy',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -26,13 +25,9 @@ axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Use the router instance for smooth navigation
-      const router = useRouter();
-      if (router) {
-        router.push('/auth');
-      } else {
-        console.warn('Router instance not found, falling back to window.location');
-        // window.location.href = '/auth';
+      // Can't call hooks here; redirect via window.location as a fallback
+      if (typeof window !== 'undefined') {
+        window.location.href = '/auth';
       }
     }
     return Promise.reject(error);

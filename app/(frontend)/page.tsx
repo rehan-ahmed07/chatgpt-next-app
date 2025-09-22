@@ -4,6 +4,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAppDispatch, useAppSelector } from '@/lib/store/hooks'
 import { newChat, addMessageToChat, setChatTyping, Chat } from '@/lib/store/features/chatSlice'
+import { Ellipsis, SendHorizontal } from "lucide-react";
 
 /**
  * Simple chat-style page adapted for an AI chatting app using Tailwind / shadcn-style utilities.
@@ -156,9 +157,21 @@ export default function Home() {
                 <div className="flex justify-start">
                   <div className="max-w-[18%] rounded-lg px-4 py-2 text-sm shadow-sm bg-zinc-50 dark:bg-zinc-700 text-primary">
                     <div className="flex items-center gap-2">
-                      <span className="w-2 h-2 rounded-full bg-zinc-50 dark:bg-zinc-700 text-primary animate-pulse" style={{ animationDelay: '0ms' }} />
-                      <span className="w-2 h-2 rounded-full bg-zinc-50 dark:bg-zinc-700 text-primary animate-pulse" style={{ animationDelay: '150ms' }} />
-                      <span className="w-2 h-2 rounded-full bg-zinc-50 dark:bg-zinc-700 text-primary animate-pulse" style={{ animationDelay: '300ms' }} />
+                      <span
+                        className="inline-block w-2 h-2 rounded-full bg-zinc-800 dark:bg-zinc-200"
+                        style={{ animation: 'typing-bounce 1s infinite', animationDelay: '0ms' }}
+                        aria-hidden
+                      />
+                      <span
+                        className="inline-block w-2 h-2 rounded-full bg-zinc-800 dark:bg-zinc-200"
+                        style={{ animation: 'typing-bounce 1s infinite', animationDelay: '150ms' }}
+                        aria-hidden
+                      />
+                      <span
+                        className="inline-block w-2 h-2 rounded-full bg-zinc-800 dark:bg-zinc-200"
+                        style={{ animation: 'typing-bounce 1s infinite', animationDelay: '300ms' }}
+                        aria-hidden
+                      />
                     </div>
                   </div>
                 </div>
@@ -201,9 +214,9 @@ export default function Home() {
                 <button
                   type="submit"
                   disabled={sending}
-                  className="ml-1 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white disabled:opacity-60 shrink-0"
+                  className="ml-1 inline-flex items-center rounded-md bg-indigo-600 px-4 py-5 text-sm font-medium text-white disabled:opacity-60 shrink-0"
                 >
-                  {sending ? "Sending..." : "Send"}
+                  {sending ? <Ellipsis /> : <SendHorizontal />}
                 </button>
               </div>
 
