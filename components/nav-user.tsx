@@ -28,6 +28,9 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar"
+import { useRouter } from 'next/navigation'
+import { useAppDispatch } from '@/lib/store/hooks'
+import { logoutUser } from '@/lib/store/features/authSlice'
 
 export function NavUser({
   user,
@@ -39,6 +42,8 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+  const dispatch = useAppDispatch()
 
   return (
     <SidebarMenu>
@@ -98,7 +103,18 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={async (e) => {
+                e.preventDefault()
+                try {
+                  await dispatch(logoutUser()).unwrap()
+                } catch (err) {
+                  // ignore errors for now
+                } finally {
+                  router.push('/auth')
+                }
+              }}
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>

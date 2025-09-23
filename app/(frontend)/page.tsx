@@ -128,7 +128,7 @@ export default function Home() {
       <main className="flex-1 overflow-hidden">
         <div className="h-full flex flex-col">
           {/* Messages area */}
-          <div className="flex-1 overflow-y-auto px-4 py-6" style={{ paddingBottom: 180 }}>
+          <div className="flex-1 overflow-y-auto px-4 py-6" style={{ paddingBottom: 140 }}>
             <div className="mx-auto max-w-6xl space-y-4">
               {messages.map(m => (
                 <div
@@ -181,82 +181,76 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Composer (sticky) */}
+          {/* Composer (fixed, aligned with content) */}
           <div
-            className="border-t px-4 py-3 bg-background/80 backdrop-blur-sm shadow-lg"
-            style={{
-              position: 'fixed',
-              left: 'var(--sidebar-width, 0px)',
-              right: 0,
-              bottom: 0,
-              zIndex: 6,
-            }}
+            className="composer-fixed border-t px-4 py-3 bg-background/80 backdrop-blur-sm shadow-lg"
           >
-            <div className="mx-auto max-w-6xl px-4">
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                sendMessage(input);
-              }}
-              className=""
-            >
-              <div className="flex gap-3 items-center">
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  aria-label="Message"
-                  placeholder="Type a message and press Enter to send (Shift+Enter for newline)..."
-                  className="min-h-[44px] max-h-40 w-full resize-none rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-
+            <div className="chat-composer-inner mx-auto max-w-6xl px-4">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  sendMessage(input);
+                }}
+                className=""
+              >
+                <div className="flex gap-3 items-center flex-col md:flex-row">
+                  <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    aria-label="Message"
+                    placeholder="Type a message and press Enter to send (Shift+Enter for newline)..."
+                    className="min-h-[44px] max-h-40 w-full resize-none rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    style={{ minWidth: 0 }}
+                  />
+                
                 <button
                   type="submit"
                   disabled={sending}
-                  className="ml-1 inline-flex items-center rounded-md bg-indigo-600 px-4 py-5 text-sm font-medium text-white disabled:opacity-60 shrink-0"
+                  className="mt-2 md:mt-0 md:ml-1 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 md:py-5 text-sm font-medium text-white disabled:opacity-60 shrink-0"
                 >
                   {sending ? <Ellipsis /> : <SendHorizontal />}
                 </button>
-              </div>
-
-              <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
-                <div>Tip: Press Enter to send</div>
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      // Clear composer only
-                      setInput("");
-                      textareaRef.current?.focus();
-                    }}
-                    className="rounded bg-muted/40 px-2 py-1 hover:bg-muted/30"
-                  >
-                    Clear
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      // Reset conversation to the initial system prompt
-                      setMessages([
-                        {
-                          id: "m1",
-                          role: "system",
-                          text: "You are connected to the AI assistant. Ask anything.",
-                          createdAt: new Date().toISOString(),
-                        },
-                      ]);
-                      setInput("");
-                      textareaRef.current?.focus();
-                    }}
-                    className="rounded px-2 py-1 hover:bg-muted/30"
-                  >
-                    Reset
-                  </button>
                 </div>
-              </div>
-            </form>
+
+                <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+                  <div>Tip: Press Enter to send</div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // Clear composer only
+                        setInput("");
+                        textareaRef.current?.focus();
+                      }}
+                      className="rounded bg-muted/40 px-2 py-1 hover:bg-muted/30"
+                    >
+                      Clear
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        // Reset conversation to the initial system prompt
+                        setMessages([
+                          {
+                            id: "m1",
+                            role: "system",
+                            text: "You are connected to the AI assistant. Ask anything.",
+                            createdAt: new Date().toISOString(),
+                          },
+                        ]);
+                        setInput("");
+                        textareaRef.current?.focus();
+                      }}
+                      className="rounded px-2 py-1 hover:bg-muted/30"
+                    >
+                      Reset
+                    </button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>

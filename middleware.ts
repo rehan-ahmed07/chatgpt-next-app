@@ -2,7 +2,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const token = request.cookies.get('token');
+  // Read the cookie value (request.cookies.get returns a CookieValue object)
+  const token = request.cookies.get('token')?.value ?? null;
   const isAuthPage = request.nextUrl.pathname.startsWith('/auth');
 
   if (!token && !isAuthPage) {
@@ -18,6 +19,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|auth).*)'
+    // Run middleware for all app routes except Next internals and api
+    '/((?!api|_next/static|_next/image|favicon.ico).*)'
   ]
 };
